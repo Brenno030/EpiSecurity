@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPIs - Higiene e Segurança do Trabalho</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="icon">🛡️</div>
+                <h1>Higiene e Segurança do Trabalho</h1>
+                <p class="subtitle">Sistema de Recomendação de EPIs</p>
+            </div>
+        </header>
+
+        <main>
+            <section class="form-section">
+                <div class="card">
+                    <h2>Selecione o Tipo de Trabalho</h2>
+                    <p class="description">Escolha a atividade que será realizada para visualizar os Equipamentos de Proteção Individual (EPIs) recomendados.</p>
+                    
+                    <form action="/buscar-epis" method="POST">
+                        <div class="form-group">
+                            <label for="tipoTrabalho">Tipo de Trabalho:</label>
+                            <select name="tipoTrabalho" id="tipoTrabalho" required>
+                                <option value="">-- Selecione uma opção --</option>
+                                <% trabalhos.forEach(trabalho => { %>
+                                    <option value="<%= trabalho.tipo %>" 
+                                            <%= tipoSelecionado === trabalho.tipo ? 'selected' : '' %>>
+                                        <%= trabalho.tipo %>
+                                    </option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">
+                            <span>🔍</span> Ver EPIs Recomendados
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <% if (typeof trabalhoSelecionado !== 'undefined' && trabalhoSelecionado) { %>
+                <section class="result-section">
+                    <div class="card result-card">
+                        <div class="result-header">
+                            <h2>📋 EPIs Recomendados</h2>
+                            <div class="trabalho-info">
+                                <h3><%= trabalhoSelecionado.tipo %></h3>
+                                <p class="trabalho-descricao"><%= trabalhoSelecionado.descricao %></p>
+                            </div>
+                        </div>
+
+                        <div class="epis-grid">
+                            <% trabalhoSelecionado.epis.forEach((epi, index) => { %>
+                                <div class="epi-card" data-delay="<%= index * 0.1 %>">
+                                    <div class="epi-number"><%= index + 1 %></div>
+                                    <div class="epi-content">
+                                        <h4 class="epi-nome"><%= epi.nome %></h4>
+                                        <p class="epi-descricao"><%= epi.descricao %></p>
+                                    </div>
+                                    <div class="epi-icon">✓</div>
+                                </div>
+                            <% }); %>
+                        </div>
+
+                        <div class="alert-info">
+                            <strong>⚠️ Importante:</strong> O uso correto dos EPIs é obrigatório e essencial para garantir sua segurança no ambiente de trabalho. Certifique-se de que todos os equipamentos estão em boas condições e foram aprovados pelo setor de segurança.
+                        </div>
+                    </div>
+                </section>
+            <% } %>
+        </main>
+
+        <footer>
+            <p>Sistema de EPIs - Higiene e Segurança do Trabalho © 2026</p>
+            <p class="footer-note">Desenvolvido com Node.js, Express, EJS e MongoDB</p>
+        </footer>
+    </div>
+</body>
+</html>
