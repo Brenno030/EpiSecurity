@@ -199,7 +199,6 @@ app.post('/calcular-multa', (req, res) => {
   const grau = parseInt(grauInfracao);
   
   // Importando os dados da NR 28
-  const nr28Data = require('./data/nr28_data');
   const faixa = nr28Data.TABELA_GRADACAO.find(f => n >= f.faixa[0] && n <= f.faixa[1]);
   
   if (faixa && faixa.graus[grau]) {
