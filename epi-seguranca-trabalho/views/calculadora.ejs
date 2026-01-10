@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora NR 28 - Penalidades</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="icon">⚖️</div>
+                <h1>Calculadora NR 28</h1>
+                <p class="subtitle">Fiscalização e Penalidades - Estimativa de Multas</p>
+                <nav class="main-nav">
+                    <a href="/" class="nav-link">🛡️ Ver EPIs</a>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section class="form-section">
+                <div class="card">
+                    <h2>Simulador de Multas</h2>
+                    <p class="description">Calcule o valor estimado das multas trabalhistas com base no número de empregados e gravidade da infração conforme a NR 28.</p>
+                    
+                    <form action="/calcular-multa" method="POST">
+                        <div class="form-group">
+                            <label for="numEmpregados">Número de Empregados:</label>
+                            <input type="number" name="numEmpregados" id="numEmpregados" min="1" placeholder="Ex: 50" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tipoInfracao">Tipo de Infração:</label>
+                            <select name="tipoInfracao" id="tipoInfracao" required>
+                                <option value="seguranca">Segurança do Trabalho</option>
+                                <option value="medicina">Medicina do Trabalho</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="grauInfracao">Grau da Infração (I1 a I4):</label>
+                            <select name="grauInfracao" id="grauInfracao" required>
+                                <option value="1">Grau 1 (I1)</option>
+                                <option value="2">Grau 2 (I2)</option>
+                                <option value="3">Grau 3 (I3)</option>
+                                <option value="4">Grau 4 (I4)</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">
+                            <span>🧮</span> Calcular Valor Estimado
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <% if (resultado === 'erro') { %>
+                <div class="alert-danger">
+                    <strong>❌ Erro:</strong> Não foi possível calcular a multa. Verifique os dados inseridos.
+                </div>
+            <% } else if (resultado) { %>
+                <section class="result-section">
+                    <div class="card result-card">
+                        <div class="result-header">
+                            <h2>💰 Resultado do Cálculo</h2>
+                            <div class="trabalho-info">
+                                <h3>Infração de <%= resultado.tipo %></h3>
+                                <p class="trabalho-descricao">Para uma empresa com <%= resultado.numEmpregados %> empregados e infração de Grau <%= resultado.grau %>.</p>
+                            </div>
+                        </div>
+
+                        <div class="epis-grid">
+                            <div class="epi-card">
+                                <div class="epi-number">min</div>
+                                <div class="epi-content">
+                                    <h4 class="epi-nome">Valor Mínimo</h4>
+                                    <p class="epi-descricao"><%= resultado.ufirMin %> UFIR</p>
+                                    <p class="price-tag">R$ <%= resultado.valorMin %></p>
+                                </div>
+                            </div>
+
+                            <div class="epi-card">
+                                <div class="epi-number">max</div>
+                                <div class="epi-content">
+                                    <h4 class="epi-nome">Valor Máximo</h4>
+                                    <p class="epi-descricao"><%= resultado.ufirMax %> UFIR</p>
+                                    <p class="price-tag">R$ <%= resultado.valorMax %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert-info">
+                            <strong>📝 Base Legal:</strong> Os cálculos são baseados no Anexo I da NR 28. O valor da UFIR utilizado é de R$ 1,0641 (conforme Portaria MTb n.º 290/1997). Lembre-se que estes valores são estimativas e podem variar conforme a fiscalização e reincidências.
+                        </div>
+                    </div>
+                </section>
+            <% } %>
+        </main>
+
+        <footer>
+            <p>Sistema de EPIs & NR 28 © 2026</p>
+            <p class="footer-note">Desenvolvido com Node.js, Express, EJS e MongoDB</p>
+        </footer>
+    </div>
+</body>
+</html>
