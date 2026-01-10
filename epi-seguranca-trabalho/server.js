@@ -187,6 +187,41 @@ app.post('/buscar-epis', async (req, res) => {
   }
 });
 
+// Rotas da Calculadora NR 28
+app.get('/calculadora-nr28', (req, res) => {
+  res.render('calculadora', { resultado: null });
+});
+
+app.post('/calcular-multa', (req, res) => {
+  const { numEmpregados, tipoInfracao, grauInfracao } = req.body;
+  const n = parseInt(numEmpregados);
+  const grau = parseInt(grauInfracao);
+  
+  // Importando os dados da NR 28
+  const nr28Data = require('./data/nr28_data');
+  const faixa = nr28Data.TABELA_GRADACAO.find(f => n >= f.faixa[0] && n <= f.faixa[1]);
+  
+  if (faixa && faixa.graus[grau]) {
+    const valoresUFIR = faixa.graus[grau][tipoInfracao];
+    const valorMin = (valoresUFIR[0] * nr28Data.VALOR_UFIR).toFixed(2);
+    const valorMax = (valoresUFIR[1] * nr28Data.VALOR_UFIR).toFixed(2);
+    
+    res.render('calculadora', { 
+      resultado: {
+        numEmpregados: n,
+        tipo: tipoInfracao === 'seguranca' ? 'Segurança do Trabalho' : 'Medicina do Trabalho',
+        grau: grau,
+        ufirMin: valoresUFIR[0],
+        ufirMax: valoresUFIR[1],
+        valorMin: valorMin,
+        valorMax: valorMax
+      }
+    });
+  } else {
+    res.render('calculadora', { resultado: 'erro' });
+  }
+});
+
 // Iniciar servidor
 async function iniciarServidor() {
   await connectToDatabase();
