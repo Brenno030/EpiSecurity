@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const path = require('path');
+const nr28Data = require('./data/nr28_data'); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
